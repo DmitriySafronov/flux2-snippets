@@ -1,0 +1,41 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: pgo
+  namespace: postgres-operator
+spec:
+  # gitImplementation: go-git
+  interval: 1d
+  timeout: 5m
+  ref:
+    branch: main
+  url: https://github.com/CrunchyData/postgres-operator-examples.git
+  ignore: |
+    # exclude all
+    /*
+    # include charts directory
+    !/helm/install
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: pgo
+  namespace: postgres-operator
+spec:
+  serviceAccountName: sa-postgres-operator
+  interval: 10m
+  chart:
+    spec:
+      chart: helm/install
+      version: 5.3.2
+      sourceRef:
+        kind: GitRepository
+        name: pgo
+        namespace: postgres-operator
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  values:
+    installCRDs: true
