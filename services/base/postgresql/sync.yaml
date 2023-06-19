@@ -1,0 +1,41 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: postgrescluster
+  namespace: postgres-cluster
+spec:
+  # gitImplementation: go-git
+  interval: 1d
+  timeout: 5m
+  ref:
+    branch: main
+  url: https://github.com/CrunchyData/postgres-operator-examples.git
+  ignore: |
+    # exclude all
+    /*
+    # include charts directory
+    !/helm/postgres
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: postgrescluster
+  namespace: postgres-cluster
+spec:
+  serviceAccountName: sa-postgres-cluster
+  interval: 10m
+  chart:
+    spec:
+      chart: helm/postgres
+      version: 5.3.2
+      sourceRef:
+        kind: GitRepository
+        name: postgrescluster
+        namespace: postgres-cluster
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  values:
+    installCRDs: true
