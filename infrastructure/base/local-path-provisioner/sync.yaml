@@ -32,3 +32,9 @@ spec:
       sourceRef:
         kind: GitRepository
         name: local-path-provisioner
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  values:
+    installCRDs: true
