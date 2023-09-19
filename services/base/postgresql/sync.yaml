@@ -5,7 +5,6 @@ metadata:
   name: postgrescluster
   namespace: postgres-cluster
 spec:
-  # gitImplementation: go-git
   interval: 1d
   timeout: 5m
   ref:
@@ -28,7 +27,6 @@ spec:
   chart:
     spec:
       chart: helm/postgres
-      version: 5.3.2
       sourceRef:
         kind: GitRepository
         name: postgrescluster
