@@ -5,7 +5,6 @@ metadata:
   name: local-path-provisioner
   namespace: local-path-provisioner
 spec:
-  # gitImplementation: go-git
   interval: 1d
   timeout: 5m
   ref:
@@ -28,7 +27,6 @@ spec:
     spec:
       interval: 5m
       chart: deploy/chart/local-path-provisioner
-      version: 0.0.24
       sourceRef:
         kind: GitRepository
         name: local-path-provisioner
